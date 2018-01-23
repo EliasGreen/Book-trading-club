@@ -1,0 +1,9 @@
+.books {
+  width: 90%;
+  margin: auto;
+  padding: 20px;
+  background: #2d2d2d;
+  border: 10px solid #416f8e;
+  height: 1000px;
+  overflow: auto;
+}
