@@ -10,7 +10,8 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navBtns: null
+      navBtns: null,
+      booksLink: ""
     };
     this.handleLogOut = this.handleLogOut.bind(this);
   }
@@ -64,7 +65,8 @@ class Header extends React.Component {
                         <NavItem>
                           <div className="link" onClick={that.handleLogOut}>^Log^ [ouT]</div>
                         </NavItem>
-                      </Nav>
+                      </Nav>,
+            ["booksLink"]: "/books"
            });
         }
         else {
@@ -76,7 +78,8 @@ class Header extends React.Component {
                         <NavItem>
                           <Link to='/login' className="link">^Log^ [iN]</Link>
                         </NavItem>
-                      </Nav>
+                      </Nav>,
+          ["booksLink"]: "/login"
            });
          }
         }
@@ -88,7 +91,7 @@ class Header extends React.Component {
        <Navbar inverse collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to='/books'>Books</Link>
+            <Link to={this.state.booksLink}>Books</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>

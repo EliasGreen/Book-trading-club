@@ -1,3 +1,16 @@
 body {
   background: #f6ff67;
+  height:100%;
+}
+
+.jumbotron {
+  width: 90%;
+  margin: auto;
+  padding: 10px;
+  background-color: #353535;
+}
+
+.jmbtrn-p {
+  text-align: center;
+  color: #f6ff67;
 }
