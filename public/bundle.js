@@ -1398,31 +1398,6 @@ SafeAnchor.defaultProps = defaultProps;
 /* 19 */
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.5.3' };
-if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var store = __webpack_require__(81)('wks');
-var uid = __webpack_require__(52);
-var Symbol = __webpack_require__(24).Symbol;
-var USE_SYMBOL = typeof Symbol == 'function';
-
-var $exports = module.exports = function (name) {
-  return store[name] || (store[name] =
-    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
-};
-
-$exports.store = store;
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
@@ -1502,7 +1477,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 22 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1874,11 +1849,36 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.5.3' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var store = __webpack_require__(81)('wks');
+var uid = __webpack_require__(52);
+var Symbol = __webpack_require__(24).Symbol;
+var USE_SYMBOL = typeof Symbol == 'function';
+
+var $exports = module.exports = function (name) {
+  return store[name] || (store[name] =
+    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+};
+
+$exports.store = store;
+
+
+/***/ }),
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(24);
-var core = __webpack_require__(19);
+var core = __webpack_require__(21);
 var ctx = __webpack_require__(75);
 var hide = __webpack_require__(31);
 var PROTOTYPE = 'prototype';
@@ -5006,7 +5006,7 @@ module.exports = Object.create || function create(O, Properties) {
 
 var def = __webpack_require__(27).f;
 var has = __webpack_require__(28);
-var TAG = __webpack_require__(20)('toStringTag');
+var TAG = __webpack_require__(22)('toStringTag');
 
 module.exports = function (it, tag, stat) {
   if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
@@ -5017,7 +5017,7 @@ module.exports = function (it, tag, stat) {
 /* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports.f = __webpack_require__(20);
+exports.f = __webpack_require__(22);
 
 
 /***/ }),
@@ -5025,7 +5025,7 @@ exports.f = __webpack_require__(20);
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(24);
-var core = __webpack_require__(19);
+var core = __webpack_require__(21);
 var LIBRARY = __webpack_require__(86);
 var wksExt = __webpack_require__(89);
 var defineProperty = __webpack_require__(27).f;
@@ -8465,7 +8465,7 @@ var Iterators = __webpack_require__(46);
 var $iterCreate = __webpack_require__(264);
 var setToStringTag = __webpack_require__(88);
 var getPrototypeOf = __webpack_require__(267);
-var ITERATOR = __webpack_require__(20)('iterator');
+var ITERATOR = __webpack_require__(22)('iterator');
 var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
 var FF_ITERATOR = '@@iterator';
 var KEYS = 'keys';
@@ -34741,7 +34741,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -34761,7 +34761,7 @@ if(false) {
 /* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -34881,7 +34881,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -34901,7 +34901,7 @@ if(false) {
 /* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -34962,7 +34962,7 @@ var Accordion = function (_React$Component) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(256);
-module.exports = __webpack_require__(19).Object.assign;
+module.exports = __webpack_require__(21).Object.assign;
 
 
 /***/ }),
@@ -35118,7 +35118,7 @@ var setToStringTag = __webpack_require__(88);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(31)(IteratorPrototype, __webpack_require__(20)('iterator'), function () { return this; });
+__webpack_require__(31)(IteratorPrototype, __webpack_require__(22)('iterator'), function () { return this; });
 
 module.exports = function (Constructor, NAME, next) {
   Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
@@ -35180,7 +35180,7 @@ __webpack_require__(269);
 var global = __webpack_require__(24);
 var hide = __webpack_require__(31);
 var Iterators = __webpack_require__(46);
-var TO_STRING_TAG = __webpack_require__(20)('toStringTag');
+var TO_STRING_TAG = __webpack_require__(22)('toStringTag');
 
 var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
   'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
@@ -35268,7 +35268,7 @@ __webpack_require__(274);
 __webpack_require__(279);
 __webpack_require__(280);
 __webpack_require__(281);
-module.exports = __webpack_require__(19).Symbol;
+module.exports = __webpack_require__(21).Symbol;
 
 
 /***/ }),
@@ -35288,7 +35288,7 @@ var $fails = __webpack_require__(42);
 var shared = __webpack_require__(81);
 var setToStringTag = __webpack_require__(88);
 var uid = __webpack_require__(52);
-var wks = __webpack_require__(20);
+var wks = __webpack_require__(22);
 var wksExt = __webpack_require__(89);
 var wksDefine = __webpack_require__(90);
 var enumKeys = __webpack_require__(276);
@@ -35659,7 +35659,7 @@ module.exports = { "default": __webpack_require__(283), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(284);
-module.exports = __webpack_require__(19).Object.setPrototypeOf;
+module.exports = __webpack_require__(21).Object.setPrototypeOf;
 
 
 /***/ }),
@@ -35713,7 +35713,7 @@ module.exports = { "default": __webpack_require__(287), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(288);
-var $Object = __webpack_require__(19).Object;
+var $Object = __webpack_require__(21).Object;
 module.exports = function create(P, D) {
   return $Object.create(P, D);
 };
@@ -36057,7 +36057,7 @@ function isReactComponent(component) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(292);
-module.exports = __webpack_require__(19).Object.entries;
+module.exports = __webpack_require__(21).Object.entries;
 
 
 /***/ }),
@@ -36174,7 +36174,7 @@ Alert.defaultProps = defaultProps;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(295);
-module.exports = __webpack_require__(19).Object.values;
+module.exports = __webpack_require__(21).Object.values;
 
 
 /***/ }),
@@ -38077,7 +38077,7 @@ module.exports = { "default": __webpack_require__(316), __esModule: true };
 
 __webpack_require__(139);
 __webpack_require__(317);
-module.exports = __webpack_require__(19).Array.from;
+module.exports = __webpack_require__(21).Array.from;
 
 
 /***/ }),
@@ -38148,7 +38148,7 @@ module.exports = function (iterator, fn, value, entries) {
 
 // check on default Array iterator
 var Iterators = __webpack_require__(46);
-var ITERATOR = __webpack_require__(20)('iterator');
+var ITERATOR = __webpack_require__(22)('iterator');
 var ArrayProto = Array.prototype;
 
 module.exports = function (it) {
@@ -38176,9 +38176,9 @@ module.exports = function (object, index, value) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var classof = __webpack_require__(322);
-var ITERATOR = __webpack_require__(20)('iterator');
+var ITERATOR = __webpack_require__(22)('iterator');
 var Iterators = __webpack_require__(46);
-module.exports = __webpack_require__(19).getIteratorMethod = function (it) {
+module.exports = __webpack_require__(21).getIteratorMethod = function (it) {
   if (it != undefined) return it[ITERATOR]
     || it['@@iterator']
     || Iterators[classof(it)];
@@ -38191,7 +38191,7 @@ module.exports = __webpack_require__(19).getIteratorMethod = function (it) {
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
 var cof = __webpack_require__(77);
-var TAG = __webpack_require__(20)('toStringTag');
+var TAG = __webpack_require__(22)('toStringTag');
 // ES3 wrong here
 var ARG = cof(function () { return arguments; }()) == 'Arguments';
 
@@ -38218,7 +38218,7 @@ module.exports = function (it) {
 /* 323 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ITERATOR = __webpack_require__(20)('iterator');
+var ITERATOR = __webpack_require__(22)('iterator');
 var SAFE_CLOSING = false;
 
 try {
@@ -46428,7 +46428,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -46448,7 +46448,7 @@ if(false) {
 /* 402 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -46505,7 +46505,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -46525,7 +46525,7 @@ if(false) {
 /* 405 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -46667,7 +46667,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -46687,7 +46687,7 @@ if(false) {
 /* 408 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -46817,7 +46817,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -46837,7 +46837,7 @@ if(false) {
 /* 411 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -46858,10 +46858,11 @@ const Link = __webpack_require__(17).Link
 const style = __webpack_require__(413);
 // other components and etc
 const Header = __webpack_require__(41);
-const IncomeProposal = __webpack_require__(415);
-const OutcomeProposal = __webpack_require__(418);
+const UserBook = __webpack_require__(415);
+const IncomeProposal = __webpack_require__(418);
+const OutcomeProposal = __webpack_require__(421);
 // react-bootstrap
-const {Grid, Row, Col, FormControl, ControlLabel, FormGroup, HelpBlock, Tabs, Tab} = __webpack_require__(26);
+const {Grid, Row, Col, FormControl, ControlLabel, FormGroup, HelpBlock, Tabs, Tab, Form, Button} = __webpack_require__(26);
 
 /* component for user profile */
 class Profile extends React.Component {
@@ -46870,10 +46871,14 @@ class Profile extends React.Component {
     this.state = {
       nickname: "",
       city: "",
-      street: ""
+      street: "",
+      book_to_add: "",
+      user_books: "loading..."
     };
     this.cityChanged = this.cityChanged.bind(this);
     this.streetChanged = this.streetChanged.bind(this);
+    this.bookChanged = this.bookChanged.bind(this);
+    this.addBook = this.addBook.bind(this);
   }
   /****************************/
   // Handlers
@@ -46883,7 +46888,6 @@ class Profile extends React.Component {
           this.setState({
             ["city"]: value
            });
-     console.log(this.state.city);
     // set city in DB
       let that = this;
       const xhr = new XMLHttpRequest();
@@ -46910,7 +46914,6 @@ class Profile extends React.Component {
           this.setState({
             ["street"]: value
            });
-    console.log(this.state.street);
     // set street in DB
       let that = this;
       const xhr = new XMLHttpRequest();
@@ -46918,6 +46921,34 @@ class Profile extends React.Component {
       xhr.open('POST', '/set-street', true);
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       let body = 'street=' + encodeURIComponent(value);
+
+      xhr.send(body);
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        if (this.status != 200) {
+          alert( 'error: ' + (this.status ? this.statusText : 'request has not been set') );
+          return;
+        }
+        let response = JSON.parse(this.responseText);
+        console.log(response);
+        }
+  }
+  /**/
+  bookChanged(event) {
+    const value = event.target.value;
+          this.setState({
+            ["book_to_add"]: value
+           });
+  }
+  /**/
+  addBook() {
+      let that = this;
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/add-book', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      let body = 'bookname=' + encodeURIComponent(this.state.book_to_add);
 
       xhr.send(body);
 
@@ -46954,11 +46985,15 @@ class Profile extends React.Component {
           return;
         }
         let response = JSON.parse(this.responseText);
+        let books = response.books.map((e) => {
+          return React.createElement(UserBook, {img_url: e.img_url, bookname: e.bookname});
+        });
           if(response.isLogedIn == true) {
              that.setState({
             ["nickname"]: response.nickname,
             ["city"]: response.city,
-            ["street"]: response.street
+            ["street"]: response.street,
+            ["user_books"]: books
            });
           }
         }
@@ -47037,7 +47072,25 @@ class Profile extends React.Component {
                     )
                   ), 
                   React.createElement(Col, {xs: 12, md: 8, className: "right-col"}, 
-                    React.createElement("code", null, "<", 'Col xs={12} md={8}', " />")
+                    React.createElement("div", {className: "library-label"}, "Your library"), 
+                     React.createElement(Form, {inline: true, className: "input-label add-form"}, 
+                      React.createElement(FormGroup, {
+                        controlId: "addBookForm"
+                      }, 
+                        React.createElement(FormControl, {
+                          type: "text", 
+                          value: this.state.book_to_add, 
+                          placeholder: "enter book name", 
+                          onChange: this.bookChanged, 
+                          style: {"width": "100%"}}
+                        ), 
+                         React.createElement(Button, {type: "button", style: {"width": "100%"}, onClick: this.addBook}, "Add book"), 
+                        React.createElement(FormControl.Feedback, null)
+                      )
+                    ), 
+                    React.createElement("div", {className: "library"}, 
+                      this.state.user_books
+                    )
                   )
                 )
               )
@@ -47063,7 +47116,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -47083,12 +47136,12 @@ if(false) {
 /* 414 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
 // module
-exports.push([module.i, ".profile {\n  background-color: blue;\n  width: 70%;\n  height: 1000px;\n  margin: auto;\n  border: #9d9d9d 10px solid;\n}\n\n.left-col {\n  background: #2a2a2a;\n  height: 980px;\n  border-right: #9d9d9d 10px solid;\n}\n\n.right-col {\n  background: #2a2a2a;\n  width: 59.7%;\n  height: 980px;\n}\n\n.profile-label {\n  text-align: center;\n  font-size: 30px;\n  color: #f6ff67;\n  margin: 3%;\n  margin-top: 30px;\n}\n\n.proposal-label {\n  text-align: center;\n  font-size: 30px;\n  color: #f6ff67;\n  margin: 3%;\n  margin-top: 60px;\n}\n\n.profile-line {\n    background-color: #44708f;\n    width: 90%;\n    height: 3px;\n    margin: auto;\n    margin-bottom: 10px\n}\n\n.input-label {\n  width: 90%;\n  margin: auto;\n  color: rgb(157, 157, 157);\n}\n\n.tabs {\n  width: 90%;\n  margin: auto;\n  margin-top: 20px;\n}\n\n/* .tab:focus {\n  background: #44708f;\n  color: #ffffff;\n}\n\n.tab:hover {\n  background: #44708f;\n  color: #ffffff;\n} */\n\n.nav-tabs>li>a {\n  color: #44708f;\n}\n\n.proposals-container {\n  height: 400px;\n  background: #2a2a2a;\n  border: 5px solid white;\n  overflow: auto;\n}", ""]);
+exports.push([module.i, ".profile {\n  background-color: blue;\n  width: 70%;\n  height: 1000px;\n  margin: auto;\n  border: #9d9d9d 10px solid;\n}\n\n.left-col {\n  background: #2a2a2a;\n  height: 980px;\n  border-right: #9d9d9d 10px solid;\n}\n\n.right-col {\n  background: #2a2a2a;\n  width: 60.7%;\n  height: 980px;\n}\n\n.profile-label {\n  text-align: center;\n  font-size: 30px;\n  color: #f6ff67;\n  margin: 3%;\n  margin-top: 30px;\n}\n\n.proposal-label {\n  text-align: center;\n  font-size: 30px;\n  color: #f6ff67;\n  margin: 3%;\n  margin-top: 60px;\n}\n\n.profile-line {\n    background-color: #44708f;\n    width: 90%;\n    height: 3px;\n    margin: auto;\n    margin-bottom: 10px\n}\n\n.input-label {\n  width: 90%;\n  margin: auto;\n  color: rgb(157, 157, 157);\n}\n\n.tabs {\n  width: 90%;\n  margin: auto;\n  margin-top: 20px;\n}\n\n.nav-tabs>li>a {\n  color: #44708f;\n}\n\n.proposals-container {\n  height: 400px;\n  background: #2a2a2a;\n  border: 5px solid white;\n  overflow: auto;\n}\n\n.library {\n  background: #6ca9d4;\n  width: 94.2%;\n  height: 815px;\n  margin: auto;\n  margin-top: 140px;\n  overflow: auto;\n  border: 10px #9d9d9d solid;\n  border-top-right-radius: 10px;\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n\n.add-form {\n  float: right;\n  margin-top: 20px;\n  margin-right: 25px;\n  background: #3f6e8e;\n  border-radius: 10px;\n  padding: 20px;\n  width: 50%;\n}\n\n.library-label {\n  color: #f6ff67;\n  float: left;\n  font-size: 30px;\n  padding: 30px;\n  background: #3f6e8e;\n  margin-top: 10px;\n  margin-left: 20px;\n  height: 140px;\n  border: 10px #9d9d9d solid;\n  border-top-left-radius: 10px;\n  border-top-right-radius: 10px;\n}", ""]);
 
 // exports
 
@@ -47101,6 +47154,80 @@ const React = __webpack_require__(0);
 const Link = __webpack_require__(17).Link
 // style for BOOK
 const style = __webpack_require__(416);
+
+/* component for displaying books in user library */
+class UserBook extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      img_url: this.props.img_url,
+      bookname: this.props.bookname
+    };
+  }
+  render() {
+    return(
+      React.createElement("div", {className: "book"}, 
+        React.createElement("img", {src: this.state.img_url, alt: "book pic", className: "img-user"}), 
+        React.createElement("div", {className: "bookname"}, this.state.bookname)
+      )
+    );
+  }
+}
+module.exports = UserBook;
+
+/***/ }),
+/* 416 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(417);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(20)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!./UserBook.css", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!./UserBook.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 417 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(19)(false);
+// imports
+
+
+// module
+exports.push([module.i, ".book {\n  background: black;\n  width: 31.2%;\n  float: left;\n  margin-left: 10px;\n  border: 10px solid #9d9d9d;\n  margin-top: 20px;\n  margin-bottom: 0;\n}\n\n.img-user {\n  width: 100%;\n  max-height: 200px;\n}\n\n.bookname {\n  padding: 10px;\n  text-align: center;\n  font-size: 30px;\n  overflow: auto;\n  white-space: nowrap;\n  color: #f0ff00;\n}\n\n.nickname {\n  padding: 10px;\n  text-align: center;\n  color: rgba(239, 255, 0, 0.42);\n}\n\n.exchange-btn {\n  color: yellow;\n  width: 100%;\n  background: #ff006a;\n  padding: 5px;\n  text-align: center;\n}\n\n.exchange-btn:hover {\n  color: black;\n  width: 100%;\n  background: yellow;\n  font-weight: bold;\n  cursor: pointer;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 418 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const React = __webpack_require__(0);
+const Link = __webpack_require__(17).Link
+// style for BOOK
+const style = __webpack_require__(419);
 // react-bootstrap
 const {Button} = __webpack_require__(26);
 
@@ -47130,13 +47257,13 @@ class IncomeProposal extends React.Component {
 module.exports = IncomeProposal;
 
 /***/ }),
-/* 416 */
+/* 419 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(417);
+var content = __webpack_require__(420);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -47144,7 +47271,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -47161,10 +47288,10 @@ if(false) {
 }
 
 /***/ }),
-/* 417 */
+/* 420 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 
@@ -47175,13 +47302,13 @@ exports.push([module.i, ".proposal {\n  border: 10px solid rgb(21, 90, 140);\n  
 
 
 /***/ }),
-/* 418 */
+/* 421 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const React = __webpack_require__(0);
 const Link = __webpack_require__(17).Link
 // style for BOOK
-const style = __webpack_require__(419);
+const style = __webpack_require__(422);
 // react-bootstrap
 const {Button} = __webpack_require__(26);
 
@@ -47210,13 +47337,13 @@ class OutcomeProposal extends React.Component {
 module.exports = OutcomeProposal;
 
 /***/ }),
-/* 419 */
+/* 422 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(420);
+var content = __webpack_require__(423);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -47224,7 +47351,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(20)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -47241,10 +47368,10 @@ if(false) {
 }
 
 /***/ }),
-/* 420 */
+/* 423 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(19)(false);
 // imports
 
 

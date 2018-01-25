@@ -1,6 +1,8 @@
 // init project
 const express = require('express');
 const app = express();
+// book search "engine"
+const books = require('google-books-search');
 // dotenv
 require('dotenv').config()
 // body-parser
@@ -96,7 +98,6 @@ let userSchema = new Schema({
 // get the model
 let userModel = mongoose.model('usersforbooktrading', userSchema);
 /***********************************/
-
 // getting the layout(page) of application
 app.get("*", function(request, response) {
   // prevent user from getting the wrong page when user is authenticated or not
@@ -191,7 +192,7 @@ app.post("/is-loged-in", function(request, response) {
   if(request.session.hasOwnProperty("passport")) {
    userModel.findById(request.session.passport.user, (err, document) => {
      if(!err) {
-       response.json({isLogedIn: request.isAuthenticated(), nickname: document.nickname, city: document.city, street: document.street});
+       response.json({isLogedIn: request.isAuthenticated(), nickname: document.nickname, city: document.city, street: document.street, books: document.books});
      } 
      else {
        console.log("ERROR!: ", err);
@@ -225,6 +226,26 @@ app.post("/set-street", function(request, response) {
         if (err) throw err;
         response.json({update: true});
       });
+    });
+});
+/***********************************/
+app.post("/add-book", function(request, response) {
+      userModel.findById(request.session.passport.user, (err, user) => {
+      if (err) throw err;
+        //search book img
+        books.search(request.body["bookname"], function(error, results) {
+            if ( ! error ) {
+                let arrayOfBooks = user.books;
+                arrayOfBooks.push({bookname:request.body["bookname"], img_url: results[0].thumbnail});
+                user.set({books: arrayOfBooks});
+                user.save(function (err, updatedUser) {
+                  if (err) throw err;
+                  response.json({update: true});
+                });
+            } else {
+                console.log(error);
+            }
+        });  
     });
 });
 /******************************/

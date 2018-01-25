@@ -14,7 +14,7 @@
 
 .right-col {
   background: #2a2a2a;
-  width: 59.7%;
+  width: 60.7%;
   height: 980px;
 }
 
@@ -54,16 +54,6 @@
   margin-top: 20px;
 }
 
-/* .tab:focus {
-  background: #44708f;
-  color: #ffffff;
-}
-
-.tab:hover {
-  background: #44708f;
-  color: #ffffff;
-} */
-
 .nav-tabs>li>a {
   color: #44708f;
 }
@@ -73,4 +63,41 @@
   background: #2a2a2a;
   border: 5px solid white;
   overflow: auto;
+}
+
+.library {
+  background: #6ca9d4;
+  width: 94.2%;
+  height: 815px;
+  margin: auto;
+  margin-top: 140px;
+  overflow: auto;
+  border: 10px #9d9d9d solid;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.add-form {
+  float: right;
+  margin-top: 20px;
+  margin-right: 25px;
+  background: #3f6e8e;
+  border-radius: 10px;
+  padding: 20px;
+  width: 50%;
+}
+
+.library-label {
+  color: #f6ff67;
+  float: left;
+  font-size: 30px;
+  padding: 30px;
+  background: #3f6e8e;
+  margin-top: 10px;
+  margin-left: 20px;
+  height: 140px;
+  border: 10px #9d9d9d solid;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }

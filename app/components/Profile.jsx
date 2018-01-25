@@ -5,10 +5,11 @@ const Link = require('react-router-dom').Link
 const style = require('../styles/Profile');
 // other components and etc
 const Header = require('./Header');
+const UserBook = require('./UserBook');
 const IncomeProposal = require('./IncomeProposal');
 const OutcomeProposal = require('./OutcomeProposal');
 // react-bootstrap
-const {Grid, Row, Col, FormControl, ControlLabel, FormGroup, HelpBlock, Tabs, Tab} = require('react-bootstrap');
+const {Grid, Row, Col, FormControl, ControlLabel, FormGroup, HelpBlock, Tabs, Tab, Form, Button} = require('react-bootstrap');
 
 /* component for user profile */
 class Profile extends React.Component {
@@ -17,10 +18,14 @@ class Profile extends React.Component {
     this.state = {
       nickname: "",
       city: "",
-      street: ""
+      street: "",
+      book_to_add: "",
+      user_books: "loading..."
     };
     this.cityChanged = this.cityChanged.bind(this);
     this.streetChanged = this.streetChanged.bind(this);
+    this.bookChanged = this.bookChanged.bind(this);
+    this.addBook = this.addBook.bind(this);
   }
   /****************************/
   // Handlers
@@ -30,7 +35,6 @@ class Profile extends React.Component {
           this.setState({
             ["city"]: value
            });
-     console.log(this.state.city);
     // set city in DB
       let that = this;
       const xhr = new XMLHttpRequest();
@@ -57,7 +61,6 @@ class Profile extends React.Component {
           this.setState({
             ["street"]: value
            });
-    console.log(this.state.street);
     // set street in DB
       let that = this;
       const xhr = new XMLHttpRequest();
@@ -65,6 +68,34 @@ class Profile extends React.Component {
       xhr.open('POST', '/set-street', true);
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       let body = 'street=' + encodeURIComponent(value);
+
+      xhr.send(body);
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        if (this.status != 200) {
+          alert( 'error: ' + (this.status ? this.statusText : 'request has not been set') );
+          return;
+        }
+        let response = JSON.parse(this.responseText);
+        console.log(response);
+        }
+  }
+  /**/
+  bookChanged(event) {
+    const value = event.target.value;
+          this.setState({
+            ["book_to_add"]: value
+           });
+  }
+  /**/
+  addBook() {
+      let that = this;
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/add-book', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      let body = 'bookname=' + encodeURIComponent(this.state.book_to_add);
 
       xhr.send(body);
 
@@ -101,11 +132,15 @@ class Profile extends React.Component {
           return;
         }
         let response = JSON.parse(this.responseText);
+        let books = response.books.map((e) => {
+          return <UserBook img_url={e.img_url} bookname={e.bookname}/>;
+        });
           if(response.isLogedIn == true) {
              that.setState({
             ["nickname"]: response.nickname,
             ["city"]: response.city,
-            ["street"]: response.street
+            ["street"]: response.street,
+            ["user_books"]: books
            });
           }
         }
@@ -184,7 +219,25 @@ class Profile extends React.Component {
                     </Tabs>
                   </Col>
                   <Col xs={12} md={8} className="right-col">
-                    <code>&lt;{'Col xs={12} md={8}'} /&gt;</code>
+                    <div className="library-label">Your library</div>
+                     <Form inline className="input-label add-form">
+                      <FormGroup
+                        controlId="addBookForm"
+                      >
+                        <FormControl
+                          type="text"
+                          value={this.state.book_to_add}
+                          placeholder="enter book name"
+                          onChange={this.bookChanged}
+                          style={{"width": "100%"}}
+                        />
+                         <Button type="button" style={{"width": "100%"}} onClick={this.addBook}>Add book</Button>
+                        <FormControl.Feedback />
+                      </FormGroup>
+                    </Form>
+                    <div className="library">
+                      {this.state.user_books}
+                    </div>
                   </Col>
                 </Row>
               </Grid>
