@@ -67,7 +67,7 @@ class LogIn extends React.Component {
     return (
       <div>
             <Header/>
-            <Form horizontal method="post" action="/login" name="login" onSubmit={this.handleSubmit}>   
+            <Form className="Form" horizontal method="post" action="/login" name="login" onSubmit={this.handleSubmit}>   
               <FormGroup controlId="formHorizontalEmail">
                 <Col className="form-label" sm={2}>
                   Email

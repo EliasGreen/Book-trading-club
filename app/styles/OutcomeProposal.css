@@ -1,0 +1,32 @@
+.proposal {
+  border: 10px solid rgb(21, 90, 140);
+  margin-bottom: 35px;
+}
+
+.arrow {
+  background: #6ca9d4;
+  text-align: center;
+  font-size: 50px;
+  color: #44708f;
+}
+
+.bookname {
+  background: #44708f;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.nickname {
+  background: #9d9d9d;
+  color: white;
+  text-align: center;
+  padding: 5px;
+  font-size: 10px;
+}
+
+.btn-crossout {
+  width: 100%;
+}

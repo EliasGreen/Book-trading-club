@@ -191,7 +191,7 @@ app.post("/is-loged-in", function(request, response) {
   if(request.session.hasOwnProperty("passport")) {
    userModel.findById(request.session.passport.user, (err, document) => {
      if(!err) {
-       response.json({isLogedIn: request.isAuthenticated(), nickname: document.nickname});
+       response.json({isLogedIn: request.isAuthenticated(), nickname: document.nickname, city: document.city, street: document.street});
      } 
      else {
        console.log("ERROR!: ", err);
@@ -202,6 +202,30 @@ app.post("/is-loged-in", function(request, response) {
   else {
         response.json({isLogedIn: request.isAuthenticated(), nickname: "0"}); 
     }
+});
+/***********************************/
+app.post("/set-city", function(request, response) {
+      userModel.findById(request.session.passport.user, (err, user) => {
+      if (err) throw err;
+
+      user.set({city: request.body["city"]});
+      user.save(function (err, updatedUser) {
+        if (err) throw err;
+        response.json({update: true});
+      });
+    });
+});
+/***********************************/
+app.post("/set-street", function(request, response) {
+      userModel.findById(request.session.passport.user, (err, user) => {
+      if (err) throw err;
+
+      user.set({street: request.body["street"]});
+      user.save(function (err, updatedUser) {
+        if (err) throw err;
+        response.json({update: true});
+      });
+    });
 });
 /******************************/
 // user sessions handlers:
