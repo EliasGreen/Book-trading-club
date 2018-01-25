@@ -70,7 +70,7 @@ class SignUp extends React.Component {
     return (
       <div>
             <Header/>
-            <Form horizontal method="post" action="/signup" name="signup" onSubmit={this.handleSubmit}>
+            <Form className="Form" horizontal method="post" action="/signup" name="signup" onSubmit={this.handleSubmit}>
               <FormGroup controlId="formHorizontalNickname">
                 <Col className="form-label" sm={2}>
                   Nickname

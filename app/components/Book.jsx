@@ -3,7 +3,7 @@ const Link = require('react-router-dom').Link
 // style for BOOK
 const style = require('../styles/Book');
 
-/*componnets alclass Bookl books */
+/* component for displaying book */
 class Book extends React.Component {
   constructor(props) {
     super(props);

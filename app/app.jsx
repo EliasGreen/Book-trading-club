@@ -18,6 +18,7 @@ const Main = require('./components/Main');
 const Books = require('./components/Books');
 const SignUp = require('./components/SignUp');
 const LogIn = require('./components/LogIn');
+const Profile = require('./components/Profile');
 
 render((
   <Provider store={store}>
@@ -27,6 +28,7 @@ render((
         <Route path="/books" component={Books}/>
         <Route path="/signup" component={SignUp}/>
         <Route path="/login" component={LogIn}/>
+        <Route path="/profile" component={Profile}/>
       </div>
     </BrowserRouter>
   </Provider>), document.getElementById('main'));
