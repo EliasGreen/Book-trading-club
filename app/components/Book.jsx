@@ -15,11 +15,11 @@ class Book extends React.Component {
   }
   render() {
     return(
-      <div className="book">
-        <img src={this.state.img_url} alt="book pic" className="img"/>
-        <div className="bookname">{this.state.bookname}</div>
-        <div className="exchange-btn">Exchange</div>
-        <div className="nickname">Added by {this.state.nickname}</div>
+      <div className="book-all">
+        <img src={this.state.img_url} alt="book pic" className="img-all"/>
+        <div className="bookname-all">{this.state.bookname}</div>
+        <div className="exchange-btn-all" onClick={() => this.props.showModal(this.props.bookname, this.props.nickname)}>Exchange</div>
+        <div className="nickname-all">Added by {this.state.nickname}</div>
       </div>
     );
   }
