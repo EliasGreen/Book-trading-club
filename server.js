@@ -236,7 +236,7 @@ app.post("/add-book", function(request, response) {
         books.search(request.body["bookname"], function(error, results) {
             if ( ! error ) {
                 let arrayOfBooks = user.books;
-                arrayOfBooks.push({bookname:request.body["bookname"], img_url: results[0].thumbnail});
+                arrayOfBooks.push({bookname:request.body["bookname"], img_url: results[0].thumbnail, nickname: user.nickname});
                 user.set({books: arrayOfBooks});
                 user.save(function (err, updatedUser) {
                   if (err) throw err;
@@ -246,6 +246,57 @@ app.post("/add-book", function(request, response) {
                 console.log(error);
             }
         });  
+    });
+});
+/***********************************/
+app.post("/get-all-users-books", function(request, response) {
+       userModel.find({}, (err, users) => {
+          if(err) throw err;
+          let books = []          
+         
+          for(let i = 0; i < users.length; i++) {
+            for(let j = 0; j < users[i].books.length; j++) {
+              // function for filtering
+               function checkBookName(el) {
+                 return el.chosenBook == users[i].books[j].bookname;
+               }
+              let filteredIncome = users[i].income.filter(checkBookName);
+              let filteredOutcome = users[i].outcome.filter(checkBookName);
+              if((filteredIncome.length == 0) && (filteredOutcome.length == 0)) {
+                books.push(users[i].books[j]);
+              }
+            }
+            if(i == users.length - 1) response.json({books: books});
+          }
+       });
+});
+/***********************************/
+app.post("/create-proposals", function(request, response) { 
+  userModel.findById(request.session.passport.user, (err, user) => {
+      if (err) response.json({error: 1});
+       console.log(user.nickname);
+       console.log(request.body["anotherUserNickname"]);
+       console.log(request.body["chosenBook"]);
+       console.log(request.body["chosenAnotherUserBook"]);
+       let arrayOfOutcome = user.outcome;
+       arrayOfOutcome.push({chosenBook: request.body["chosenBook"], 
+                            anotherUserNickname: request.body["anotherUserNickname"], 
+                            chosenAnotherUserBook: request.body["chosenAnotherUserBook"]});
+      user.set({outcome: arrayOfOutcome});
+      user.save(function (err, updatedUser) {
+                  if (err) response.json({error: 2});
+                  userModel.findOne({nickname: request.body["anotherUserNickname"]}, (err, anotherUser) => {
+                      if (err) response.json({error: 3});
+                    let arrayOfIncome = anotherUser.income;
+                     arrayOfIncome.push({chosenBook: request.body["chosenAnotherUserBook"], 
+                                          anotherUserNickname: user.nickname, 
+                                          chosenAnotherUserBook: request.body["chosenBook"]});
+                    anotherUser.set({income: arrayOfIncome});
+                    anotherUser.save((err, updatedAnotherUser) => {
+                      response.json({error: 0});
+                    });
+                  });
+                });
     });
 });
 /******************************/
