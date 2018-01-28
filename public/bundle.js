@@ -46415,7 +46415,7 @@ class Books extends React.Component {
   // send variables to create proposals
   /***********************/
   handleExchange() {
-        // post request to create proposals
+     // post request to create proposals
       let that = this;
       const xhr = new XMLHttpRequest();
       
@@ -46623,7 +46623,14 @@ class Book extends React.Component {
       img_url: this.props.img_url,
       nickname: this.props.nickname,
       bookname: this.props.bookname,
-      tooltip: null
+      tooltip: React.createElement(Popover, {id: "popover", title: "User location"}, 
+                            React.createElement("div", null, 
+                            "Street:" 
+                           ), 
+                           React.createElement("div", null, 
+                             "City:" 
+                           )
+                        )
     };
   }
   /***********************/
@@ -47440,7 +47447,70 @@ class IncomeProposal extends React.Component {
       bookname1: this.props.bookname1,
       bookname2: this.props.bookname2
     };
+   this.handleRefuse = this.handleRefuse.bind(this);
+   this.handleAccept = this.handleAccept.bind(this);
   }
+  /****************************/
+  // Handlers
+  /****************************/
+  handleAccept() {
+    // post request to create proposals
+      let that = this;
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/accept-proposal', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+      
+      let body = 'chosenAnotherUserBook=' + encodeURIComponent(this.state.bookname2) +
+      '&chosenBook=' + encodeURIComponent(this.state.bookname1) +
+      '&anotherUserNickname=' + encodeURIComponent(this.state.nickname);
+
+
+      xhr.send(body);
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        if (this.status != 200) {
+          alert( 'error: ' + (this.status ? this.statusText : 'request has not been set') );
+          return;
+        }
+        let response = JSON.parse(this.responseText);
+          if(response.error == 0) {
+             window.location.href = "/profile";
+          }
+        }
+  }
+  /****************************/
+  handleRefuse() {
+    // post request to create proposals
+      let that = this;
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/refuse-proposal-income', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+      
+      let body = 'chosenAnotherUserBook=' + encodeURIComponent(this.state.bookname2) +
+      '&chosenBook=' + encodeURIComponent(this.state.bookname1) +
+      '&anotherUserNickname=' + encodeURIComponent(this.state.nickname);
+
+
+      xhr.send(body);
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        if (this.status != 200) {
+          alert( 'error: ' + (this.status ? this.statusText : 'request has not been set') );
+          return;
+        }
+        let response = JSON.parse(this.responseText);
+          if(response.error == 0) {
+             window.location.href = "/profile";
+          }
+        }
+  }
+  /****************************/
   render() {
     return(
       React.createElement("div", {className: "proposal"}, 
@@ -47448,8 +47518,8 @@ class IncomeProposal extends React.Component {
         React.createElement("div", {className: "arrow"}, "➘"), 
         React.createElement("div", {className: "bookname"}, this.state.bookname2), 
         React.createElement("div", {className: "nickname"}, "From ", this.state.nickname), 
-        React.createElement(Button, {className: "btn"}, "Accept"), 
-        React.createElement(Button, {className: "btn"}, "Refuse")
+        React.createElement(Button, {className: "btn", onClick: this.handleAccept}, "Accept"), 
+        React.createElement(Button, {className: "btn", onClick: this.handleRefuse}, "Refuse")
       )
     );
   }
@@ -47521,7 +47591,40 @@ class OutcomeProposal extends React.Component {
       bookname1: this.props.bookname1,
       bookname2: this.props.bookname2
     };
+    this.handleRefuse = this.handleRefuse.bind(this);
   }
+  /****************************/
+  // Handlers
+  /****************************/
+  handleRefuse() {
+    // post request to create proposals
+      let that = this;
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/refuse-proposal', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+      
+      let body = 'chosenAnotherUserBook=' + encodeURIComponent(this.state.bookname2) +
+      '&chosenBook=' + encodeURIComponent(this.state.bookname1) +
+      '&anotherUserNickname=' + encodeURIComponent(this.state.nickname);
+
+
+      xhr.send(body);
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        if (this.status != 200) {
+          alert( 'error: ' + (this.status ? this.statusText : 'request has not been set') );
+          return;
+        }
+        let response = JSON.parse(this.responseText);
+          if(response.error == 0) {
+             window.location.href = "/profile";
+          }
+        }
+  }
+  /****************************/
   render() {
     return(
       React.createElement("div", {className: "proposal"}, 
@@ -47529,7 +47632,7 @@ class OutcomeProposal extends React.Component {
         React.createElement("div", {className: "arrow"}, "➘"), 
         React.createElement("div", {className: "bookname"}, this.state.bookname2), 
         React.createElement("div", {className: "nickname"}, "For ", this.state.nickname), 
-        React.createElement(Button, {className: "btn-crossout"}, "Refuse")
+        React.createElement(Button, {className: "btn-crossout", onClick: this.handleRefuse}, "Refuse")
       )
     );
   }

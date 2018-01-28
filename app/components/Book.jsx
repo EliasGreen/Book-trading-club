@@ -13,7 +13,14 @@ class Book extends React.Component {
       img_url: this.props.img_url,
       nickname: this.props.nickname,
       bookname: this.props.bookname,
-      tooltip: null
+      tooltip: <Popover id="popover" title="User location">
+                            <div>
+                            Street: 
+                           </div>
+                           <div>
+                             City: 
+                           </div>
+                        </Popover>
     };
   }
   /***********************/

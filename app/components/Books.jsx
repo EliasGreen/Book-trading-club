@@ -44,7 +44,7 @@ class Books extends React.Component {
   // send variables to create proposals
   /***********************/
   handleExchange() {
-        // post request to create proposals
+     // post request to create proposals
       let that = this;
       const xhr = new XMLHttpRequest();
       

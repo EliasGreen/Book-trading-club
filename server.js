@@ -302,10 +302,6 @@ app.post("/get-user-filtered-books", function(request, response) {
 app.post("/create-proposals", function(request, response) { 
   userModel.findById(request.session.passport.user, (err, user) => {
       if (err) response.json({error: 1});
-       console.log(user.nickname);
-       console.log(request.body["anotherUserNickname"]);
-       console.log(request.body["chosenBook"]);
-       console.log(request.body["chosenAnotherUserBook"]);
        let arrayOfOutcome = user.outcome;
        arrayOfOutcome.push({chosenBook: request.body["chosenBook"], 
                             anotherUserNickname: request.body["anotherUserNickname"], 
@@ -320,6 +316,144 @@ app.post("/create-proposals", function(request, response) {
                                           anotherUserNickname: user.nickname, 
                                           chosenAnotherUserBook: request.body["chosenBook"]});
                     anotherUser.set({income: arrayOfIncome});
+                    anotherUser.save((err, updatedAnotherUser) => {
+                      response.json({error: 0});
+                    });
+                  });
+                });
+    });
+});
+/***********************************/
+app.post("/refuse-proposal", function(request, response) { 
+  userModel.findById(request.session.passport.user, (err, user) => {
+      if (err) response.json({error: 1});
+        function checkProposal(element, index, array) {
+              if((element.chosenBook == request.body["chosenBook"]) &&
+                 (element.anotherUserNickname == request.body["anotherUserNickname"]) &&
+                 (element.chosenAnotherUserBook == request.body["chosenAnotherUserBook"])) {
+                  return true
+              }
+              else {
+                return false;
+              }
+            }
+       let arrayOfOutcome = user.outcome;
+       arrayOfOutcome.splice(arrayOfOutcome.findIndex(checkProposal), 1);
+      user.set({outcome: arrayOfOutcome});
+      user.save(function (err, updatedUser) {
+                  if (err) response.json({error: 2});
+                  userModel.findOne({nickname: request.body["anotherUserNickname"]}, (err, anotherUser) => {
+                      if (err) response.json({error: 3});
+                    let arrayOfIncome = anotherUser.income;
+                     arrayOfIncome.splice(arrayOfIncome.findIndex(checkProposal), 1);
+                    anotherUser.set({income: arrayOfIncome});
+                    anotherUser.save((err, updatedAnotherUser) => {
+                      response.json({error: 0});
+                    });
+                  });
+                });
+    });
+});
+/***********************************/
+app.post("/accept-proposal", function(request, response) { 
+  userModel.findById(request.session.passport.user, (err, user) => {
+      if (err) response.json({error: 1});
+        function checkProposal(element, index, array) {
+              if((element.chosenBook == request.body["chosenBook"]) &&
+                 (element.anotherUserNickname == request.body["anotherUserNickname"]) &&
+                 (element.chosenAnotherUserBook == request.body["chosenAnotherUserBook"])) {
+                  return true
+              }
+              else {
+                return false;
+              }
+            }
+        function checkBooknameUser(element, index, array) {
+                  if(element.bookname == request.body["chosenBook"]) {
+                      return true
+                  }
+                  else {
+                    return false;
+                  }
+                }
+        function checkBooknameAnotherUser(element, index, array) {
+                      if(element.bookname == request.body["chosenAnotherUserBook"]) {
+                          return true
+                      }
+                      else {
+                        return false;
+                      }
+                    }
+        let arrayOfIncome = user.income;
+        //search book img
+        books.search(request.body["chosenAnotherUserBook"], function(error, results) {
+            if ( ! error ) {
+                let arrayOfBooks = user.books;
+                arrayOfBooks.splice(arrayOfBooks.findIndex(checkBooknameUser), 1);
+                arrayOfBooks.push({bookname:request.body["chosenAnotherUserBook"], img_url: results[0].thumbnail, nickname: user.nickname});
+                user.set({books: arrayOfBooks});
+                
+                arrayOfIncome.splice(arrayOfIncome.findIndex(checkProposal), 1);
+                user.set({income: arrayOfIncome});
+              
+                user.save(function (err, updatedUser) {
+                            if (err) response.json({error: 2});
+                            userModel.findOne({nickname: request.body["anotherUserNickname"]}, (err, anotherUser) => {
+                                if (err) response.json({error: 3});
+                               //search book img
+                                books.search(request.body["chosenBook"], function(error, results) {
+                                    if (!error) {
+                                        let arrayOfBooks = anotherUser.books;
+                                      
+                                        arrayOfBooks.splice(arrayOfBooks.findIndex(checkBooknameAnotherUser), 1);
+                                      
+                                        arrayOfBooks.push({bookname:request.body["chosenBook"], img_url: results[0].thumbnail, nickname: anotherUser.nickname});
+                                        anotherUser.set({books: arrayOfBooks});
+                                      
+                                        let arrayOfOutcome = anotherUser.outcome;
+                                        arrayOfOutcome.splice(arrayOfOutcome.findIndex(checkProposal), 1);
+                                        anotherUser.set({outcome: arrayOfOutcome});
+                                        anotherUser.save((err, updatedAnotherUser) => {
+                                          response.json({error: 0});
+                                        });
+                                        
+                                    } else {
+                                        console.log(error);
+                                    }
+                                });
+                            });
+                          });
+              
+            } else {
+                console.log(error);
+            }
+        }); 
+    });
+});
+/***********************************/
+app.post("/refuse-proposal-income", function(request, response) { 
+  userModel.findById(request.session.passport.user, (err, user) => {
+      if (err) response.json({error: 1});
+        function checkProposal(element, index, array) {
+              if((element.chosenBook == request.body["chosenBook"]) &&
+                 (element.anotherUserNickname == request.body["anotherUserNickname"]) &&
+                 (element.chosenAnotherUserBook == request.body["chosenAnotherUserBook"])) {
+                  return true
+              }
+              else {
+                return false;
+              }
+            }
+        let arrayOfIncome = user.income;
+        arrayOfIncome.splice(arrayOfIncome.findIndex(checkProposal), 1);
+      user.set({income: arrayOfIncome});
+      user.save(function (err, updatedUser) {
+                  if (err) response.json({error: 2});
+                  userModel.findOne({nickname: request.body["anotherUserNickname"]}, (err, anotherUser) => {
+                      if (err) response.json({error: 3});
+                    let arrayOfOutcome = anotherUser.outcome;
+                    arrayOfOutcome.splice(arrayOfOutcome.findIndex(checkProposal), 1);
+                    anotherUser.set({outcome: arrayOfOutcome});
                     anotherUser.save((err, updatedAnotherUser) => {
                       response.json({error: 0});
                     });
