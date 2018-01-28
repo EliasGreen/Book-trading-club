@@ -46390,7 +46390,8 @@ class Books extends React.Component {
        chosenBook: "",
        anotherUserNickname: "",
        disabled: true,
-       books: "loading..."
+       books: "loading...",
+       modal_content: "loading..."
     };
     
     this.handleShow = this.handleShow.bind(this);
@@ -46399,8 +46400,8 @@ class Books extends React.Component {
     this.handleExchange = this.handleExchange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
   }
-  /***********************/
-  // handlers
+   /***********************/
+   // handlers
    /***********************/
   handleShowModal(chosenAnotherUserBook, anotherUserNickname) {
     // show Modal
@@ -46451,6 +46452,7 @@ class Books extends React.Component {
   }
   /***********************/
   handleSelectChange(event) {
+    console.log(event.target.value);
      this.setState({
           ["chosenBook"]: event.target.value,
           ["disabled"]: false
@@ -46471,7 +46473,7 @@ class Books extends React.Component {
   componentWillMount() {
     // load books
       let that = this;
-      const xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest();
       
       xhr.open('POST', '/get-all-users-books', true);
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -46485,18 +46487,47 @@ class Books extends React.Component {
           return;
         }
         let response = JSON.parse(this.responseText);
-        console.log("response");
-        console.log(response);
         let books = response.books.map((el) => {
           return React.createElement(Book, {showModal: that.handleShowModal, bookname: el.bookname, nickname: el.nickname, img_url: el.img_url}) 
         });
-        console.log("boooks");
-        console.log(books);
            that.setState({
           ["books"]: React.createElement("div", {className: "books"}, 
                       books
                     )
            });
+       }
+      // getl user's filtered books
+      xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/get-user-filtered-books', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.send();
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        if (this.status != 200) {
+          alert( 'error: ' + (this.status ? this.statusText : 'request has not been set') );
+          return;
+        }
+        let response = JSON.parse(this.responseText);
+        let options = response.books.map((el) => {
+          return React.createElement("option", {value: el.bookname, key: el.bookname}, el.bookname);
+        });
+        if(options.length > 0) {
+           that.setState({
+          ["modal_content"]: React.createElement(FormControl, {componentClass: "select", 
+                                placeholder: "select", 
+                                onChange: that.handleSelectChange}, 
+                                options
+                              )
+           });
+        }
+        else {
+           that.setState({
+            ["modal_content"]: "You do not have books: add the one before exchanging!"
+             });
+        }
        }
   }
   render() {
@@ -46512,13 +46543,7 @@ class Books extends React.Component {
             React.createElement("form", null, 
               React.createElement(FormGroup, {controlId: "formControlsSelect"}, 
                 React.createElement(ControlLabel, null, "Select"), 
-                React.createElement(FormControl, {componentClass: "select", 
-                  placeholder: "select", 
-                  value: this.state.chosenBook, 
-                  onChange: this.handleSelectChange}, 
-                  React.createElement("option", {value: "select"}, "torop"), 
-                  React.createElement("option", {value: "other"}, "garri")
-                )
+                this.state.modal_content
               )
             )
           ), 
@@ -46585,6 +46610,8 @@ exports.push([module.i, ".books {\n  width: 90%;\n  margin: auto;\n  padding: 20
 
 const React = __webpack_require__(0);
 const Link = __webpack_require__(17).Link
+// react-bootstrap
+const {OverlayTrigger, Popover} = __webpack_require__(23);
 // style for BOOK
 const style = __webpack_require__(404);
 
@@ -46595,16 +46622,62 @@ class Book extends React.Component {
     this.state = {
       img_url: this.props.img_url,
       nickname: this.props.nickname,
-      bookname: this.props.bookname
+      bookname: this.props.bookname,
+      tooltip: null
     };
   }
+  /***********************/
+  componentWillMount() {
+    //get street and city of user by nickname
+    let that = this;
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/get-street-city-by-nick', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+      
+      let body = 'nickname=' + encodeURIComponent(this.props.nickname);
+
+
+      xhr.send(body);
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        if (this.status != 200) {
+          alert( 'error: ' + (this.status ? this.statusText : 'request has not been set') );
+          return;
+        }
+        let response = JSON.parse(this.responseText);
+        let street = response.street;
+        let city = response.city;
+        if(response.street.length == 0)  street = "not specified";
+        if(response.city.length == 0)  city = "not specified";
+           that.setState({
+          ["tooltip"]: React.createElement(Popover, {id: "popover", title: "User location"}, 
+                            React.createElement("div", null, 
+                            "Street: ", street
+                           ), 
+                           React.createElement("div", null, 
+                             "City: ", city
+                           )
+                        )
+           });
+        }
+  }
+  /***********************/
   render() {
     return(
       React.createElement("div", {className: "book-all"}, 
         React.createElement("img", {src: this.state.img_url, alt: "book pic", className: "img-all"}), 
         React.createElement("div", {className: "bookname-all"}, this.state.bookname), 
         React.createElement("div", {className: "exchange-btn-all", onClick: () => this.props.showModal(this.props.bookname, this.props.nickname)}, "Exchange"), 
-        React.createElement("div", {className: "nickname-all"}, "Added by ", this.state.nickname)
+         React.createElement(OverlayTrigger, {
+            trigger: ['hover', 'focus'], 
+            placement: "bottom", 
+            overlay: this.state.tooltip
+          }, 
+              React.createElement("div", {className: "nickname-all"}, "Added by ", this.state.nickname)
+          )
       )
     );
   }
@@ -46651,7 +46724,7 @@ exports = module.exports = __webpack_require__(19)(false);
 
 
 // module
-exports.push([module.i, ".book-all {\n  background: black;\n  width: 13.5%;\n  float: left;\n  margin-left: 10px;\n  border: 10px solid #9d9d80;\n  margin-bottom: 20px;\n}\n\n.img-all {\n  width: 100%;\n  max-height: 200px;\n}\n\n.bookname-all {\n  padding: 10px;\n  text-align: center;\n  font-size: 30px;\n  overflow: auto;\n  white-space: nowrap;\n  color: #f0ff00;\n}\n\n.nickname-all {\n  padding: 10px;\n  text-align: center;\n  color: rgba(239, 255, 0, 0.42);\n  overflow: auto;\n}\n\n.exchange-btn-all {\n  color: yellow;\n  width: 100%;\n  background: #ff006a;\n  padding: 5px;\n  text-align: center;\n}\n\n.exchange-btn-all:hover {\n  color: black;\n  width: 100%;\n  background: yellow;\n  font-weight: bold;\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".book-all {\n  background: black;\n  width: 13.5%;\n  float: left;\n  margin-left: 10px;\n  border: 10px solid #9d9d80;\n  margin-bottom: 20px;\n}\n\n.img-all {\n  width: 100%;\n  max-height: 200px;\n  min-height: 200px;\n}\n\n.bookname-all {\n  padding: 10px;\n  text-align: center;\n  font-size: 30px;\n  overflow: auto;\n  white-space: nowrap;\n  color: #f0ff00;\n}\n\n.nickname-all {\n  padding: 10px;\n  text-align: center;\n  color: rgba(239, 255, 0, 0.42);\n  overflow: auto;\n}\n\n.nickname-all:hover {\n  cursor: help;\n}\n\n.exchange-btn-all {\n  color: yellow;\n  width: 100%;\n  background: #ff006a;\n  padding: 5px;\n  text-align: center;\n}\n\n.exchange-btn-all:hover {\n  color: black;\n  width: 100%;\n  background: yellow;\n  font-weight: bold;\n  cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -46994,7 +47067,9 @@ class Profile extends React.Component {
       city: "",
       street: "",
       book_to_add: "",
-      user_books: "loading..."
+      user_books: "loading...",
+      income: null,
+      outcome: null
     };
     this.cityChanged = this.cityChanged.bind(this);
     this.streetChanged = this.streetChanged.bind(this);
@@ -47106,6 +47181,12 @@ class Profile extends React.Component {
           return;
         }
         let response = JSON.parse(this.responseText);
+        let income = response.income.map((e) => {
+          return React.createElement(IncomeProposal, {bookname1: e.chosenBook, bookname2: e.chosenAnotherUserBook, nickname: e.anotherUserNickname});
+        });
+        let outcome = response.outcome.map((e) => {
+          return React.createElement(OutcomeProposal, {bookname1: e.chosenBook, bookname2: e.chosenAnotherUserBook, nickname: e.anotherUserNickname});
+        });
         let books = response.books.map((e) => {
           return React.createElement(UserBook, {img_url: e.img_url, bookname: e.bookname});
         });
@@ -47114,7 +47195,13 @@ class Profile extends React.Component {
             ["nickname"]: response.nickname,
             ["city"]: response.city,
             ["street"]: response.street,
-            ["user_books"]: books
+            ["user_books"]: books,
+            ["income"]: React.createElement("div", {className: "proposals-container"}, 
+                           income
+                        ),
+            ["outcome"]: React.createElement("div", {className: "proposals-container"}, 
+                           outcome
+                        )
            });
           }
         }
@@ -47177,18 +47264,10 @@ class Profile extends React.Component {
                     React.createElement("div", {className: "profile-line"}), 
                     React.createElement(Tabs, {defaultActiveKey: 1, id: "uncontrolled-tab", className: "tabs"}, 
                       React.createElement(Tab, {eventKey: 1, title: "Income"}, 
-                        React.createElement("div", {className: "proposals-container"}, 
-                          React.createElement(IncomeProposal, {bookname1: "Book Wow Yee", bookname2: "ExchangeBook!23", nickname: "Petruha"}), 
-                          React.createElement(IncomeProposal, {bookname1: "Baer", bookname2: "Numbers", nickname: "Alena"}), 
-                          React.createElement(IncomeProposal, {bookname1: "Glory", bookname2: "E9090", nickname: "Borodina"})
-                        )
+                        this.state.income
                       ), 
                       React.createElement(Tab, {eventKey: 2, title: "Outcome"}, 
-                        React.createElement("div", {className: "proposals-container"}, 
-                          React.createElement(OutcomeProposal, {bookname1: "Book dsfdsWow Yee", bookname2: "ExchangeBook!23", nickname: "Petruha"}), 
-                          React.createElement(OutcomeProposal, {bookname1: "Baer", bookname2: "Numbers", nickname: "Aledfsdna"}), 
-                          React.createElement(OutcomeProposal, {bookname1: "Glory", bookname2: "E9090", nickname: "Borodsfdina"})
-                        )
+                        this.state.outcome
                       )
                     )
                   ), 
@@ -47336,7 +47415,7 @@ exports = module.exports = __webpack_require__(19)(false);
 
 
 // module
-exports.push([module.i, ".book {\n  background: black;\n  width: 31.2%;\n  float: left;\n  margin-left: 10px;\n  border: 10px solid #9d9d9d;\n  margin-top: 20px;\n  margin-bottom: 0;\n}\n\n.img-user {\n  width: 100%;\n  max-height: 200px;\n}\n\n.bookname {\n  padding: 10px;\n  text-align: center;\n  font-size: 30px;\n  overflow: auto;\n  white-space: nowrap;\n  color: #f0ff00;\n}\n\n.nickname {\n  padding: 10px;\n  text-align: center;\n  color: rgba(239, 255, 0, 0.42);\n}\n\n.exchange-btn {\n  color: yellow;\n  width: 100%;\n  background: #ff006a;\n  padding: 5px;\n  text-align: center;\n}\n\n.exchange-btn:hover {\n  color: black;\n  width: 100%;\n  background: yellow;\n  font-weight: bold;\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".book {\n  background: black;\n  width: 31.2%;\n  float: left;\n  margin-left: 10px;\n  border: 10px solid #9d9d9d;\n  margin-top: 20px;\n  margin-bottom: 0;\n}\n\n.img-user {\n  width: 100%;\n  max-height: 200px;\n  min-height: 200px;\n}\n\n.bookname {\n  padding: 10px;\n  text-align: center;\n  font-size: 30px;\n  overflow: auto;\n  white-space: nowrap;\n  color: #f0ff00;\n}\n\n.nickname {\n  padding: 10px;\n  text-align: center;\n  color: rgba(239, 255, 0, 0.42);\n}\n\n.exchange-btn {\n  color: yellow;\n  width: 100%;\n  background: #ff006a;\n  padding: 5px;\n  text-align: center;\n}\n\n.exchange-btn:hover {\n  color: black;\n  width: 100%;\n  background: yellow;\n  font-weight: bold;\n  cursor: pointer;\n}", ""]);
 
 // exports
 

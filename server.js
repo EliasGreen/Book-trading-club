@@ -192,7 +192,7 @@ app.post("/is-loged-in", function(request, response) {
   if(request.session.hasOwnProperty("passport")) {
    userModel.findById(request.session.passport.user, (err, document) => {
      if(!err) {
-       response.json({isLogedIn: request.isAuthenticated(), nickname: document.nickname, city: document.city, street: document.street, books: document.books});
+       response.json({isLogedIn: request.isAuthenticated(), nickname: document.nickname, city: document.city, street: document.street, books: document.books, income: document.income, outcome: document.outcome});
      } 
      else {
        console.log("ERROR!: ", err);
@@ -226,6 +226,13 @@ app.post("/set-street", function(request, response) {
         if (err) throw err;
         response.json({update: true});
       });
+    });
+});
+/***********************************/
+app.post("/get-street-city-by-nick", function(request, response) {
+      userModel.findOne({nickname: request.body["nickname"]}, (err, user) => {
+      if (err) throw err;
+      response.json({street: user.street, city: user.city});
     });
 });
 /***********************************/
@@ -269,6 +276,27 @@ app.post("/get-all-users-books", function(request, response) {
             if(i == users.length - 1) response.json({books: books});
           }
        });
+});
+/***********************************/
+app.post("/get-user-filtered-books", function(request, response) {
+       userModel.findById(request.session.passport.user, (err, user) => {
+          if (err) throw err;
+          let books = []          
+
+            for(let j = 0; j < user.books.length; j++) {
+              // function for filtering
+               function checkBookName(el) {
+                 return el.chosenBook == user.books[j].bookname;
+               }
+              let filteredIncome = user.income.filter(checkBookName);
+              let filteredOutcome = user.outcome.filter(checkBookName);
+              if((filteredIncome.length == 0) && (filteredOutcome.length == 0)) {
+                books.push(user.books[j]);
+              }
+            }
+         
+          response.json({books: books});
+     });
 });
 /***********************************/
 app.post("/create-proposals", function(request, response) { 
