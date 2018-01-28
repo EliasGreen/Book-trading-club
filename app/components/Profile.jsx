@@ -20,7 +20,9 @@ class Profile extends React.Component {
       city: "",
       street: "",
       book_to_add: "",
-      user_books: "loading..."
+      user_books: "loading...",
+      income: null,
+      outcome: null
     };
     this.cityChanged = this.cityChanged.bind(this);
     this.streetChanged = this.streetChanged.bind(this);
@@ -132,6 +134,12 @@ class Profile extends React.Component {
           return;
         }
         let response = JSON.parse(this.responseText);
+        let income = response.income.map((e) => {
+          return <IncomeProposal bookname1={e.chosenBook} bookname2={e.chosenAnotherUserBook} nickname={e.anotherUserNickname}/>;
+        });
+        let outcome = response.outcome.map((e) => {
+          return <OutcomeProposal bookname1={e.chosenBook} bookname2={e.chosenAnotherUserBook} nickname={e.anotherUserNickname}/>;
+        });
         let books = response.books.map((e) => {
           return <UserBook img_url={e.img_url} bookname={e.bookname}/>;
         });
@@ -140,7 +148,13 @@ class Profile extends React.Component {
             ["nickname"]: response.nickname,
             ["city"]: response.city,
             ["street"]: response.street,
-            ["user_books"]: books
+            ["user_books"]: books,
+            ["income"]: <div className="proposals-container">
+                           {income}
+                        </div>,
+            ["outcome"]: <div className="proposals-container">
+                           {outcome}
+                        </div>
            });
           }
         }
@@ -203,18 +217,10 @@ class Profile extends React.Component {
                     <div className="profile-line"></div>
                     <Tabs defaultActiveKey={1} id="uncontrolled-tab" className="tabs">
                       <Tab eventKey={1} title="Income">
-                        <div className="proposals-container">
-                          <IncomeProposal bookname1={"Book Wow Yee"} bookname2={"ExchangeBook!23"} nickname={"Petruha"}/>
-                          <IncomeProposal bookname1={"Baer"} bookname2={"Numbers"} nickname={"Alena"}/>
-                          <IncomeProposal bookname1={"Glory"} bookname2={"E9090"} nickname={"Borodina"}/>
-                        </div>
+                        {this.state.income}
                       </Tab>
                       <Tab eventKey={2} title="Outcome">
-                        <div className="proposals-container">
-                          <OutcomeProposal bookname1={"Book dsfdsWow Yee"} bookname2={"ExchangeBook!23"} nickname={"Petruha"}/>
-                          <OutcomeProposal bookname1={"Baer"} bookname2={"Numbers"} nickname={"Aledfsdna"}/>
-                          <OutcomeProposal bookname1={"Glory"} bookname2={"E9090"} nickname={"Borodsfdina"}/>
-                        </div>
+                        {this.state.outcome}
                       </Tab>
                     </Tabs>
                   </Col>

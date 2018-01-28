@@ -19,7 +19,8 @@ class Books extends React.Component {
        chosenBook: "",
        anotherUserNickname: "",
        disabled: true,
-       books: "loading..."
+       books: "loading...",
+       modal_content: "loading..."
     };
     
     this.handleShow = this.handleShow.bind(this);
@@ -28,8 +29,8 @@ class Books extends React.Component {
     this.handleExchange = this.handleExchange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
   }
-  /***********************/
-  // handlers
+   /***********************/
+   // handlers
    /***********************/
   handleShowModal(chosenAnotherUserBook, anotherUserNickname) {
     // show Modal
@@ -80,6 +81,7 @@ class Books extends React.Component {
   }
   /***********************/
   handleSelectChange(event) {
+    console.log(event.target.value);
      this.setState({
           ["chosenBook"]: event.target.value,
           ["disabled"]: false
@@ -100,7 +102,7 @@ class Books extends React.Component {
   componentWillMount() {
     // load books
       let that = this;
-      const xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest();
       
       xhr.open('POST', '/get-all-users-books', true);
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -114,18 +116,47 @@ class Books extends React.Component {
           return;
         }
         let response = JSON.parse(this.responseText);
-        console.log("response");
-        console.log(response);
         let books = response.books.map((el) => {
           return <Book showModal={that.handleShowModal} bookname={el.bookname} nickname={el.nickname} img_url={el.img_url}/> 
         });
-        console.log("boooks");
-        console.log(books);
            that.setState({
           ["books"]: <div className="books">
                       {books}     
                     </div>
            });
+       }
+      // getl user's filtered books
+      xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', '/get-user-filtered-books', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.send();
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        if (this.status != 200) {
+          alert( 'error: ' + (this.status ? this.statusText : 'request has not been set') );
+          return;
+        }
+        let response = JSON.parse(this.responseText);
+        let options = response.books.map((el) => {
+          return <option value={el.bookname} key={el.bookname}>{el.bookname}</option>;
+        });
+        if(options.length > 0) {
+           that.setState({
+          ["modal_content"]: <FormControl componentClass="select"
+                                placeholder="select"
+                                onChange={that.handleSelectChange}>
+                                {options}
+                              </FormControl>
+           });
+        }
+        else {
+           that.setState({
+            ["modal_content"]: "You do not have books: add the one before exchanging!"
+             });
+        }
        }
   }
   render() {
@@ -141,13 +172,7 @@ class Books extends React.Component {
             <form>
               <FormGroup controlId="formControlsSelect">
                 <ControlLabel>Select</ControlLabel>
-                <FormControl componentClass="select"
-                  placeholder="select"
-                  value={this.state.chosenBook}
-                  onChange={this.handleSelectChange}>
-                  <option value="select">torop</option>
-                  <option value="other">garri</option>
-                </FormControl>
+                {this.state.modal_content}
               </FormGroup>
             </form>
           </Modal.Body>

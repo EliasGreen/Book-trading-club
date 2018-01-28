@@ -29,6 +29,10 @@
   overflow: auto;
 }
 
+.nickname-all:hover {
+  cursor: help;
+}
+
 .exchange-btn-all {
   color: yellow;
   width: 100%;
